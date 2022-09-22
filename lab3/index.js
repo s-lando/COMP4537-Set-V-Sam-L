@@ -12,26 +12,26 @@ const app = express()
 const port = 5000
 app.use(express.json())
 
-// app.listen(port, async () => {
-//   try {
-//     unicornsJSON = await readFileAsync('./data.json', 'utf-8')
-//     if (!unicornsJSON) {
-//       console.log("Could not read the file");
-//       return
-//     }
-//     unicornsJSON = JSON.parse(unicornsJSON)
-//     console.log(unicornsJSON);
-//   } catch (error) {
-//     console.log(error);
-//   }
+app.listen(port, async () => {
+  try {
+    unicornsJSON = await readFileAsync('./data.json', 'utf-8')
+    if (!unicornsJSON) {
+      console.log("Could not read the file");
+      return
+    }
+    unicornsJSON = JSON.parse(unicornsJSON)
+    console.log(unicornsJSON);
+  } catch (error) {
+    console.log(error);
+  }
 
-//   console.log(`Example app listening on port ${port}`)
-// })
-
-app.listen(process.env.PORT || 5000, function (err) {
-  if (err)
-      console.log(err);
+  console.log(`Example app listening on port ${port}`)
 })
+
+// app.listen(process.env.PORT || 5000, function (err) {
+//   if (err)
+//       console.log(err);
+// })
 
 
 
