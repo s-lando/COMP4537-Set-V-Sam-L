@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const app = express()
 const port = 5000
 
-app.listen(port, async () => {
+app.listen(process.env.PORT || 5000, async () => {
   try {
     await mongoose.connect('mongodb+srv://user1:test123@cluster0.fltpsua.mongodb.net/test?retryWrites=true&w=majority')
   } catch (error) {
