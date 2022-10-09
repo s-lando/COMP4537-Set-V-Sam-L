@@ -9,9 +9,14 @@ app.use(cors())
 
 const https = require('https');
 
+
 app.use(express.json())
 
-app.listen(process.env.PORT || 5000 , async () => {
+let possibleTypes = [];
+let pokemonSchema = null;
+let pokemonModel = null;
+
+app.listen( 5000 , async () => {
   try {
     await mongoose.connect('mongodb+srv://user01:test123@assignment.v6xmn9p.mongodb.net/db1?retryWrites=true&w=majority')
   } catch (error) {
@@ -20,7 +25,7 @@ app.listen(process.env.PORT || 5000 , async () => {
   console.log(`Example app listening on port ${port}`)
   
 
-  let possibleTypes = [];
+  
 
   await https.get("https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/types.json", async (res) => {
     let data = '';
@@ -40,7 +45,7 @@ app.listen(process.env.PORT || 5000 , async () => {
 
   const { Schema } = mongoose;
 
-  const pokemonSchema = new Schema({
+  pokemonSchema = new Schema({
     "base": {
        "HP": Number,
         "Attack": Number, 
@@ -59,7 +64,7 @@ app.listen(process.env.PORT || 5000 , async () => {
       "type": {type: [String], enum: possibleTypes},
   });
 
-  const pokemonModel = mongoose.model('pokemons', pokemonSchema);
+  pokemonModel = mongoose.model('pokemons', pokemonSchema);
   await pokemonModel.deleteMany({}).then(() => {
     console.log("deleted all");
   });
@@ -83,9 +88,52 @@ app.listen(process.env.PORT || 5000 , async () => {
 
 })
 
+// app.get('/api/v2/pokemons', (req, res) => {
+//   pokemonModel.find({})
+//     .then(docs => {
+//       console.log(docs)
+//       res.json(docs)
+//     })
+//     .catch(err => {
+//       console.error(err)
+//       res.json({ msg: "db reading .. err.  Check with server devs" })
+//     })
+// })
 
 
-app.get('/api/v1/pokemons?count=2%after=10', (req, res) => {
+
+app.get('/api/v1/pokemons', async (req, res) => {
+
+  let count = req.query.count;
+  let after = req.query.after;
+
+  if (count == undefined || after == undefined) {
+    res.json({ msg: "count and after query paramaters must be provided" });
+    return;
+  }
+
+  try {
+  let pokemons = await pokemonModel.find({id: {$gt: after}});
+
+  pokemons = pokemons.slice(0, count);
+
+  res.json(pokemons);
+  } catch (error) {
+    console.log(error);
+    res.json({ msg: "db reading err - ensure your queries are correct" })
+  }
+})
+
+app.get('/api/v1/pokemon/:id', async (req, res) => {
+  let id = req.params.id;
+
+  try {
+    let pokemon = await pokemonModel.findOne({id: id});
+    res.json(pokemon);
+  }
+  catch (error) {
+    res.json({ msg: "could not find pokemon with id: " + id });
+  }
 })
 
 
