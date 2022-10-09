@@ -125,16 +125,36 @@ app.get('/api/v1/pokemons', async (req, res) => {
 })
 
 app.get('/api/v1/pokemon/:id', async (req, res) => {
-  let id = req.params.id;
+  const id = req.params.id;
+  if (id < 1 || id > 809) {
+    res.json({ msg: "id must be between 1 and 809. You submitted: " + id });
+    return;
+  }
 
   try {
     let pokemon = await pokemonModel.findOne({id: id});
     res.json(pokemon);
   }
   catch (error) {
-    res.json({ msg: "could not find pokemon with id: " + id });
+    res.json({ msg: "could not find pokemon with id: " + id + " ensure you are passing a number between 1 and 809" });
+
   }
 })
+
+app.get('/api/v1/pokemonImage/:id', async (req, res) => {
+
+  const id = req.params.id;
+  if (id < 1 || id > 809) {
+    res.json({ msg: "id must be between 1 and 809" });
+    return;
+  }
+
+  const url = "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/images/" + id.padStart(3, "0") + ".png";
+
+  res.json({ url: url });
+})
+
+
 
 
 
