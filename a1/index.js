@@ -88,19 +88,6 @@ app.listen( 5000 , async () => {
 
 })
 
-// app.get('/api/v2/pokemons', (req, res) => {
-//   pokemonModel.find({})
-//     .then(docs => {
-//       console.log(docs)
-//       res.json(docs)
-//     })
-//     .catch(err => {
-//       console.error(err)
-//       res.json({ msg: "db reading .. err.  Check with server devs" })
-//     })
-// })
-
-
 
 app.get('/api/v1/pokemons', async (req, res) => {
 
@@ -189,6 +176,25 @@ app.delete('/api/v1/pokemon/:id', async (req, res) => {
   }
 })
 
+app.patch('/api/v1/pokemon/:id', async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  
+    pokemonModel.updateOne({id: id}, body, (err, result) => {
+      if (err) {
+        res.json({ err });
+      }
+      else {
+        res.json({ result, body });
+      }
+})
+
+})
+
+app.get('*', function(req, res){
+  
+  res.json({ msg: "404 - route not found" });
+  });
 
 
 
