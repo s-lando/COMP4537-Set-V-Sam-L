@@ -149,7 +149,7 @@ app.post('/api/v1/pokemon', async (req, res) => {
     res.json({ msg: "pokemon created: ", pokemon });
   }
   catch (error) {
-    res.json({ msg: error });
+    res.json({ error });
   }
 })
 
@@ -185,14 +185,22 @@ app.patch('/api/v1/pokemon/:id', async (req, res) => {
   try {
     let pokemon =  await pokemonModel.updateOne({id: id}, body);
 
+    if (pokemon.matchedCount == 0) {
+      res.json({ msg: "pokemon not found" });
+    }
+    else {
+
     res.json({ msg: "pokemon updated: ", pokemon });
+    }
 
   }
   catch (error) {
     res.json({ error });
 
   }
+
 })
+
 
 
 app.get('*', function(req, res){
