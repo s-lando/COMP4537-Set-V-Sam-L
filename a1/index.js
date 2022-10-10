@@ -113,8 +113,9 @@ app.get('/api/v1/pokemons', async (req, res) => {
 
 app.get('/api/v1/pokemon/:id', async (req, res) => {
   const id = req.params.id;
-  if (id < 1 || id > 809) {
-    res.json({ msg: "id must be between 1 and 809. You submitted: " + id });
+
+  if (id == undefined) {
+    res.json({ msg: "id query paramater must be provided" });
     return;
   }
 
@@ -123,7 +124,7 @@ app.get('/api/v1/pokemon/:id', async (req, res) => {
     res.json(pokemon);
   }
   catch (error) {
-    res.json({ msg: "could not find pokemon with id: " + id + " ensure you are passing a number between 1 and 809" });
+    res.json({ msg: "could not find pokemon with id: " + id + ", ensure you are passing a valid number." });
 
   }
 })
@@ -132,7 +133,7 @@ app.get('/api/v1/pokemonImage/:id', async (req, res) => {
 
   const id = req.params.id;
   if (id < 1 || id > 809) {
-    res.json({ msg: "id must be between 1 and 809" });
+    res.json({ msg: "id must be between 1 and 809 inclusive" });
     return;
   }
 
@@ -156,11 +157,12 @@ app.put('/api/v1/pokemon/:id', async (req, res) => {
   const id = req.params.id;
   const body = req.body;
   try {
-    let pokemon = await pokemonModel.findOneAndUpdate({id: id}, body);
-    res.json({ msg: "pokemon updated: ", body });
+    let pokemon = await pokemonModel.findOneAndUpdate({id: id}, body, {new: true, upsert: true});
+    res.json({ msg: "pokemon upserted: ", pokemon});
   }
   catch (error) {
     res.json({ error });
+    
   }
 })
 
@@ -180,16 +182,18 @@ app.patch('/api/v1/pokemon/:id', async (req, res) => {
   const id = req.params.id;
   const body = req.body;
   
-    pokemonModel.updateOne({id: id}, body, (err, result) => {
-      if (err) {
-        res.json({ err });
-      }
-      else {
-        res.json({ result, body });
-      }
+  try {
+    let pokemon =  await pokemonModel.updateOne({id: id}, body);
+
+    res.json({ msg: "pokemon updated: ", pokemon });
+
+  }
+  catch (error) {
+    res.json({ error });
+
+  }
 })
 
-})
 
 app.get('*', function(req, res){
   
