@@ -4,8 +4,8 @@ const mongoose = require('mongoose')
 const app = express()
 const port = 5000
 
-var cors = require('cors')
-app.use(cors())
+// var cors = require('cors')
+// app.use(cors())
 
 const https = require('https');
 
@@ -16,7 +16,7 @@ let possibleTypes = [];
 let pokemonSchema = null;
 let pokemonModel = null;
 
-app.listen( 5000 , async () => {
+app.listen(process.env.PORT || 5000 , async () => {
   try {
     await mongoose.connect('mongodb+srv://user01:test123@assignment.v6xmn9p.mongodb.net/db1?retryWrites=true&w=majority')
   } catch (error) {
