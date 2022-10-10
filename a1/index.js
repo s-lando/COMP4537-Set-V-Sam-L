@@ -154,6 +154,41 @@ app.get('/api/v1/pokemonImage/:id', async (req, res) => {
   res.json({ url: url });
 })
 
+app.post('/api/v1/pokemon', async (req, res) => {
+  const body = req.body;
+  try {
+    let pokemon = await pokemonModel.create(body);
+    res.json({ msg: "pokemon created: ", pokemon });
+  }
+  catch (error) {
+    res.json({ msg: error });
+  }
+})
+
+app.put('/api/v1/pokemon/:id', async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  try {
+    let pokemon = await pokemonModel.findOneAndUpdate({id: id}, body);
+    res.json({ msg: "pokemon updated: ", body });
+  }
+  catch (error) {
+    res.json({ error });
+  }
+})
+
+app.delete('/api/v1/pokemon/:id', async (req, res) => {
+  const id = req.params.id;
+  
+  try {
+    let result = await pokemonModel.deleteOne({id: id});
+    res.json({  result });
+  }
+  catch (error) {
+    res.json({ error });
+  }
+})
+
 
 
 
