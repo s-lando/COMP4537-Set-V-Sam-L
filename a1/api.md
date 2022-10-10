@@ -1,14 +1,10 @@
-## **Note**
-
-Routes below are based on the Heroku deployment. Hosting locally, routes are prefaced with /api/v1/
-
 ## **Get Pokemons**
 
 Gets all pokemons after the "after" query param, lists as many specified by the "count" query param.
 
 - **URL**
 
-  /pokemons
+  /api/v1/pokemons
 
 - **Method:**
 
@@ -18,8 +14,8 @@ Gets all pokemons after the "after" query param, lists as many specified by the 
 
   **Required:**
 
-  - **count:** <br />
-    **after:**
+  - **count:** how many pokemons to list
+    **after:** the id of the pokemon to start listing from
 
 - **Data Params**
 
@@ -42,7 +38,7 @@ Gets one pokemon based on id param
 
 - **URL**
 
-  /pokemon/:id
+  /api/v1//pokemon/:id
 
 - **Method:**
 
@@ -75,7 +71,7 @@ Creates a new pokemon in the database
 
 - **URL**
 
-  /pokemon
+  /api/v1//pokemon
 
 - **Method:**
 
@@ -128,7 +124,7 @@ Returns the URL of an image for the pokemon based on id
 
 - **URL**
 
-  /pokemonImage/:id
+  /api/v1//pokemonImage/:id
 
 - **Method:**
 
@@ -161,7 +157,7 @@ If pokemon already exists in db, updates with new body, else creates new pokemon
 
 - **URL**
 
-  /pokemon/:id
+  /api/v1//pokemon/:id
 
 - **Method:**
 
@@ -194,7 +190,7 @@ Updates a portion or entire pokemon
 
 - **URL**
 
-  /pokemon/:id
+  /api/v1//pokemon/:id
 
 - **Method:**
 
@@ -227,7 +223,7 @@ Removes the a specified pokemon from the db
 
 - **URL**
 
-  /pokemon/:id
+  /api/v1//pokemon/:id
 
 - **Method:**
 
