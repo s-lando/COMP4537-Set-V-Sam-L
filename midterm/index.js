@@ -170,6 +170,25 @@ app.delete('/api/v1/pokemon/:id', async (req, res) => {
   }
 });
 
+app.patch('/api/v1/pokemon/:id', async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+
+  try {
+    let pokemon = await pokemonModel.updateOne({id: id}, body);
+    
+    if (pokemon.matchedCount == 0) { 
+      res.json({ msg: "pokemon not found"});
+    } else {
+    res.json({ msg: "pokemon updated", pokemon});
+  } 
+  
+  } catch (error) {
+    res.json({ msg: "pokemon not updated", error});
+  }
+});
+
+
 
 
 
