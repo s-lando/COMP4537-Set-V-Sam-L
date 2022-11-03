@@ -1,14 +1,14 @@
 class PokemonBadRequest extends Error {
   constructor(message) {
-    super(message); // (1)
-    this.name = "PokemonBadRequest"; // (2)
+    super(message);
+    this.name = "PokemonBadRequest"; 
   }
 }
 
 class PokemonBadRequestMissingID extends PokemonBadRequest {
   constructor(message) {
-    super(message); // (1)
-    this.name = "PokemonBadRequestMissingID"; // (2)
+    super(message); 
+    this.name = "PokemonBadRequestMissingID";
   }
 }
 
@@ -25,6 +25,13 @@ class PokemonNotFoundError extends PokemonDbError {
     this.name = "PokemonNotFoundError";
   }
 }
+
+export default {
+  PokemonBadRequest,
+  PokemonBadRequestMissingID,
+  PokemonDbError,
+  PokemonNotFoundError,
+};
 
 
 
