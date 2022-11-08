@@ -1,4 +1,4 @@
-import { pokemonError } from './errorHandler.js';
+import { pokemonError } from './errorClasses.js';
 
 const overrideError = (err, req, res, next) => {
   if (err instanceof pokemonError) {
