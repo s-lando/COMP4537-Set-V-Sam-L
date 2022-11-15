@@ -1,6 +1,6 @@
-import { pokemonError } from './errorClasses.js';
+const { pokemonError } = require('./errorClasses.js');
 
-const overrideError = (err, req, res, next) => {
+const errorOverride = (err, req, res, next) => {
   if (err instanceof pokemonError) {
     res.status(err.statusCode);
     res.send(err.message);
@@ -11,5 +11,4 @@ const overrideError = (err, req, res, next) => {
   }
 }
 
-export default { overrideError };
-
+module.exports = { errorOverride };

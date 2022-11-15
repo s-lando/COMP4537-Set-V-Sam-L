@@ -1,15 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-import {
+const {
   PokemonBadRequest,
   PokemonBadRequestMissingID,
   PokemonDbError,
   PokemonNotFoundError,
-} from "./errorClasses.js";
+} = require("./errorClasses");
 
-import { asyncWrapper } from "./asyncWrapper.js";
-import errorOverride, { overrideError } from "./errorOverride.js";
+const { asyncWrapper } = require("./asyncWrapper");
+const { errorOverride } = require("./errorOverride");
+
+// const dotenv = require("dotenv");
+// dotenv.config();
 
 const {connectDB, getTypes, addPokemons} = require("./setupDB.js");
 

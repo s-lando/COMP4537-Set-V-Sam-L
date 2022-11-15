@@ -42,7 +42,7 @@ class PokemonNotFoundError extends PokemonDbError {
   }
 }
 
-export default {
+module.exports = {
   PokemonError,
   PokemonBadRequest,
   PokemonBadRequestMissingID,

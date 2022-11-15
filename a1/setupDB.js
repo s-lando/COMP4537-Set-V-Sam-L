@@ -8,7 +8,7 @@ const connectDB = async () => {
     await mongoose.connect(
       "mongodb+srv://user01:test123@assignment.v6xmn9p.mongodb.net/db1?retryWrites=true&w=majority"
     );
-    mongoose.connection.db.dropDatabase();
+    // mongoose.connection.db.dropDatabase();
     } catch (error) {
     throw new PokemonDbError(error.messsage);
   }
@@ -62,6 +62,9 @@ const getTypes = async () => {
 const addPokemons = async (pokemonSchema) => {
 
   pokemonModel = mongoose.model("pokemons", pokemonSchema);
+  await pokemonModel.deleteMany({}).then(() => {
+    console.log("deleted all");
+  });
 
   await https.get(
     "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/pokedex.json",
