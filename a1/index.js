@@ -113,9 +113,18 @@ const setupApp = asyncWrapper(async () => {
 });
 setupApp();
 
+const bcrypt = require("bcrypt");
+
 app.post('/register', asyncWrapper(async (req, res) => {
-  const { username, password } = req.body
-  const user = await userModel.create({ username, password })
+  const { username, password, email } = req.body
+  const salt = await bcrypt.genSalt(10)
+  const hashedPassword = await bcrypt.hash(password, salt)
+
+  const user = await userModel.create({
+    username,
+    password: hashedPassword,
+    email
+  })
   res.send(user)
 }))
 
