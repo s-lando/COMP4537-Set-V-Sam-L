@@ -5,9 +5,7 @@ const { Schema } = mongoose;
 const connectDB = async () => {
 
     try {
-    await mongoose.connect(
-      "mongodb+srv://user01:test123@assignment.v6xmn9p.mongodb.net/db1?retryWrites=true&w=majority"
-    );
+    await mongoose.connect(process.env.MONGO_STRING);
     // mongoose.connection.db.dropDatabase();
     } catch (error) {
     throw new PokemonDbError(error.messsage);

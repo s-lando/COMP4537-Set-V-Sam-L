@@ -11,14 +11,15 @@ const {
 const { asyncWrapper } = require("./asyncWrapper");
 const { errorOverride } = require("./errorOverride");
 
-// const dotenv = require("dotenv");
-// dotenv.config();
+const dotenv = require("dotenv");
+dotenv.config();
+
+
 
 const {connectDB, getTypes, addPokemons} = require("./setupDB.js");
 
 
 const app = express();
-const port = 5000;
 
 const https = require("https");
 
@@ -34,7 +35,7 @@ const setupApp = asyncWrapper(async () => {
   const pokemonSchema = await getTypes();
   pokemonModel = await addPokemons(pokemonSchema);
   
-  app.listen(process.env.PORT || 5000, async (error) => {
+  app.listen(process.env.PORT, async (error) => {
 
     if (error) {
       console.log(error);
