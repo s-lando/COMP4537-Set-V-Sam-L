@@ -14,14 +14,12 @@ const { errorOverride } = require("./errorOverride");
 const dotenv = require("dotenv");
 dotenv.config();
 
-
-
+const { userModel } = require("./userModel");
 const {connectDB, getTypes, addPokemons} = require("./setupDB.js");
-
 
 const app = express();
 
-const https = require("https");
+// const https = require("https");
 
 app.use(express.json());
 
@@ -114,6 +112,13 @@ const setupApp = asyncWrapper(async () => {
 // });
 });
 setupApp();
+
+app.post('/register', asyncWrapper(async (req, res) => {
+  const { username, password } = req.body
+  const user = await userModel.create({ username, password })
+  res.send(user)
+}))
+
 
 app.get("/api/v1/pokemons", asyncWrapper (async (req, res) => {
   let count = req.query.count;
