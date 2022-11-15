@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 import {
   PokemonBadRequest,
   PokemonBadRequestMissingID,
@@ -9,6 +10,10 @@ import {
 
 import { asyncWrapper } from "./asyncWrapper.js";
 import errorOverride, { overrideError } from "./errorOverride.js";
+
+const {connectDB, getTypes, addPokemons} = require("./setupDB.js");
+
+
 const app = express();
 const port = 5000;
 
@@ -16,83 +21,94 @@ const https = require("https");
 
 app.use(express.json());
 
-let possibleTypes = [];
-let pokemonSchema = null;
-let pokemonModel = null;
+// let possibleTypes = [];
+// let pokemonSchema = null;
+// let pokemonModel = null;
 
 const setupApp = asyncWrapper(async () => {
+
+  await connectDB();
+  const pokemonSchema = await getTypes();
+  pokemonModel = await addPokemons(pokemonSchema);
+  
   app.listen(process.env.PORT || 5000, async (error) => {
-      await mongoose.connect(
-        "mongodb+srv://user01:test123@assignment.v6xmn9p.mongodb.net/db1?retryWrites=true&w=majority"
-      );
-     if (error) {
-      throw new PokemonDbError(error.messsage);
+
+    if (error) {
+      console.log(error);
     }
-    console.log(`Example app listening on port ${port}`);
-
-    https.get(
-      "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/types.json",
-      async (res) => {
-        let data = "";
-        res.on("data", (chunk) => {
-          data += chunk;
-        });
-        res.on("end", () => {
-          let jsonTypes = JSON.parse(data);
-          console.log(jsonTypes);
-          jsonTypes.forEach((type) => {
-            possibleTypes.push(type.english);
-          });
-          console.log(possibleTypes);
-        });
-      }
-    );
-
-    const { Schema } = mongoose;
-
-    pokemonSchema = new Schema({
-      base: {
-        HP: Number,
-        Attack: Number,
-        Defense: Number,
-        "Sp. Attack": Number,
-        "Sp. Defense": Number,
-        Speed: Number,
-      },
-      id: { type: Number, unique: true },
-      name: {
-        english: { type: String, maxlength: 20 },
-        japanese: String,
-        chinese: String,
-        french: String,
-      },
-      type: { type: [String], enum: possibleTypes },
-    });
-
-    pokemonModel = mongoose.model("pokemons", pokemonSchema);
-    await pokemonModel.deleteMany({}).then(() => {
-      console.log("deleted all");
-    });
-
-    await https.get(
-      "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/pokedex.json",
-      async (res) => {
-        let data = "";
-        res.on("data", (chunk) => {
-          data += chunk;
-        });
-        res.on("end", () => {
-          // console.log(JSON.parse(data));
-          let pokemon = JSON.parse(data);
-          pokemon.forEach(async (p) => {
-            await pokemonModel.create(p);
-          });
-        });
-      }
-    );
+    console.log("Server is running on port", port);
   });
-});
+//       await mongoose.connect(
+//         "mongodb+srv://user01:test123@assignment.v6xmn9p.mongodb.net/db1?retryWrites=true&w=majority"
+//       );
+//      if (error) {
+//       throw new PokemonDbError(error.messsage);
+//     }
+//     console.log(`Example app listening on port ${port}`);
 
+//     https.get(
+//       "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/types.json",
+//       async (res) => {
+//         let data = "";
+//         res.on("data", (chunk) => {
+//           data += chunk;
+//         });
+//         res.on("end", () => {
+//           let jsonTypes = JSON.parse(data);
+//           console.log(jsonTypes);
+//           jsonTypes.forEach((type) => {
+//             possibleTypes.push(type.english);
+//           });
+//           console.log(possibleTypes);
+//         });
+//       }
+//     );
+
+
+
+//     pokemonSchema = new Schema({
+//       base: {
+//         HP: Number,
+//         Attack: Number,
+//         Defense: Number,
+//         "Sp. Attack": Number,
+//         "Sp. Defense": Number,
+//         Speed: Number,
+//       },
+//       id: { type: Number, unique: true },
+//       name: {
+//         english: { type: String, maxlength: 20 },
+//         japanese: String,
+//         chinese: String,
+//         french: String,
+//       },
+//       type: { type: [String], enum: possibleTypes },
+//     });
+
+//     pokemonModel = mongoose.model("pokemons", pokemonSchema);
+//     await pokemonModel.deleteMany({}).then(() => {
+//       console.log("deleted all");
+//     });
+
+//     await https.get(
+//       "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/pokedex.json",
+//       async (res) => {
+//         let data = "";
+//         res.on("data", (chunk) => {
+//           data += chunk;
+//         });
+//         res.on("end", () => {
+//           // console.log(JSON.parse(data));
+//           let pokemon = JSON.parse(data);
+//           pokemon.forEach(async (p) => {
+//             await pokemonModel.create(p);
+//           });
+//         });
+//       }
+//     );
+//   });
+// });
+});
 setupApp();
 
 app.get("/api/v1/pokemons", asyncWrapper (async (req, res) => {
