@@ -145,7 +145,9 @@ app.post('/login', asyncWrapper(async (req, res) => {
   res.send(user)
 }))
 
+const auth = require('./authCheck')
 
+app.use(auth)
 
 app.get("/api/v1/pokemons", asyncWrapper (async (req, res) => {
   let count = req.query.count;
