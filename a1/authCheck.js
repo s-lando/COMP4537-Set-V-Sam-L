@@ -1,4 +1,4 @@
-const { PokemonBadRequest } = require("./a1/errorClasses");
+const { PokemonBadRequest } = require("./errorClasses");
 
 const auth = (req, res, next) => {
   const token = req.header('auth-token');

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const https = require("https");
 const { Schema } = mongoose;
+const { PokemonDbError } = require("./errorClasses.js");
 
 const connectDB = async () => {
 
@@ -8,7 +9,8 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGO_STRING);
     // mongoose.connection.db.dropDatabase();
     } catch (error) {
-    throw new PokemonDbError(error.messsage);
+    // throw new PokemonDbError(error.messsage);
+    console.log("db connection error");
   }
 }
 

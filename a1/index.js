@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
+// const { Schema } = mongoose;
 const {
   PokemonBadRequest,
   PokemonBadRequestMissingID,
@@ -14,7 +14,7 @@ const { errorOverride } = require("./errorOverride");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const { userModel } = require("./userModel");
+const userModel = require("./userModel.js");
 const {connectDB, getTypes, addPokemons} = require("./setupDB.js");
 
 const app = express();
@@ -38,7 +38,7 @@ const setupApp = asyncWrapper(async () => {
     if (error) {
       console.log(error);
     }
-    console.log("Server is running on port", port);
+    console.log("Server is running on port", process.env.PORT);
   });
 //       await mongoose.connect(
 //         "mongodb+srv://user01:test123@assignment.v6xmn9p.mongodb.net/db1?retryWrites=true&w=majority"
@@ -128,7 +128,7 @@ app.post('/register', asyncWrapper(async (req, res) => {
   res.send(user)
 }))
 
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 app.post('/login', asyncWrapper(async (req, res) => {
   const { username, password } = req.body
   const user = await userModel.findOne({ username })
@@ -141,13 +141,13 @@ app.post('/login', asyncWrapper(async (req, res) => {
   }
 
   const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
-  res.header('auth-token', token).send(token)
+  res.header('auth-token', token)
   res.send(user)
 }))
 
-const auth = require('./authCheck')
+const { auth } = require('./authCheck');
 
-app.use(auth)
+app.use(auth);
 
 app.get("/api/v1/pokemons", asyncWrapper (async (req, res) => {
   let count = req.query.count;

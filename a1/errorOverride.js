@@ -1,7 +1,7 @@
 const { pokemonError } = require('./errorClasses.js');
 
 const errorOverride = (err, req, res, next) => {
-  if (err instanceof pokemonError) {
+  if (err.statusCode == 400 || err.statusCode == 500) {
     res.status(err.statusCode);
     res.send(err.message);
   }
