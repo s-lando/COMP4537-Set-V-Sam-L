@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 // const { Schema } = mongoose;
 const {
   PokemonBadRequest,
@@ -45,61 +45,61 @@ const setupApp = asyncWrapper(async () => {
 });
 setupApp();
 
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
-app.post('/register', asyncWrapper(async (req, res) => {
-  const { username, password, email } = req.body
-  const salt = await bcrypt.genSalt(10)
-  const hashedPassword = await bcrypt.hash(password, salt)
+// app.post('/register', asyncWrapper(async (req, res) => {
+//   const { username, password, email } = req.body
+//   const salt = await bcrypt.genSalt(10)
+//   const hashedPassword = await bcrypt.hash(password, salt)
 
-  const user = await userModel.create({
-    username,
-    password: hashedPassword,
-    email
-  })
-  res.send(user)
-}))
+//   const user = await userModel.create({
+//     username,
+//     password: hashedPassword,
+//     email
+//   })
+//   res.send(user)
+// }))
 
 const jwt = require('jsonwebtoken');
-app.post('/login', asyncWrapper(async (req, res) => {
-  const { username, password } = req.body
+// app.post('/login', asyncWrapper(async (req, res) => {
+//   const { username, password } = req.body
 
-  // const appid = req.query.appid;
-  const user = await userModel.findOne({ username })
-  if (!user) {
-    throw new PokemonNotFoundError('User not found')
-  }
-  const validPassword = await bcrypt.compare(password, user.password)
-  if (!validPassword) {
-    throw new PokemonBadRequest('Invalid password')
-  }
+//   // const appid = req.query.appid;
+//   const user = await userModel.findOne({ username })
+//   if (!user) {
+//     throw new PokemonNotFoundError('User not found')
+//   }
+//   const validPassword = await bcrypt.compare(password, user.password)
+//   if (!validPassword) {
+//     throw new PokemonBadRequest('Invalid password')
+//   }
 
-  const token = jwt.sign({ role: user.role }, process.env.TOKEN_SECRET, { noTimestamp : true });
+//   const token = jwt.sign({ role: user.role }, process.env.TOKEN_SECRET, { noTimestamp : true });
 
-  //add token to db
-  await userModel.updateOne({ _id: user
-    ._id }, { $set: { token: token } });
+//   //add token to db
+//   await userModel.updateOne({ _id: user
+//     ._id }, { $set: { token: token } });
     
-  // res.header('auth-token', token)
-  res.send(user)
-}))
+//   // res.header('auth-token', token)
+//   res.send(user)
+// }))
 
-app.post('/logout', asyncWrapper(async (req, res) => {
-  const { username } = req.body
+// app.post('/logout', asyncWrapper(async (req, res) => {
+//   const { username } = req.body
 
-  // const appid = req.query.appid;
-  const user = await userModel.findOne
-  ({ username })
-  if (!user) {
-    throw new PokemonNotFoundError('User not found')
-  }
+//   // const appid = req.query.appid;
+//   const user = await userModel.findOne
+//   ({ username })
+//   if (!user) {
+//     throw new PokemonNotFoundError('User not found')
+//   }
 
-  //remove token from user
-  await userModel.updateOne({ _id: user
-    ._id }, { $set: { token: null } });
-  res.send(user)
+//   //remove token from user
+//   await userModel.updateOne({ _id: user
+//     ._id }, { $set: { token: null } });
+//   res.send(user)
 
-}))
+// }))
 
 
 // const { auth, adminAuth } = require('./authCheck');

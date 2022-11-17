@@ -37,7 +37,7 @@ class PokemonNotFoundError extends PokemonDbError {
   constructor(message) {
     super(message);
     this.name = "PokemonNotFoundError";
-    this.message = "Pokemon not found";
+    this.message = message;
     this.statusCode = 500;
   }
 }
