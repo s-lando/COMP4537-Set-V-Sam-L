@@ -26,6 +26,14 @@ const schema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  token: {
+    type: String,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
   }
 })
 
