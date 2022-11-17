@@ -74,27 +74,24 @@ app.post('/login', asyncWrapper(async (req, res) => {
     throw new PokemonBadRequest('Invalid password')
   }
 
-  //generate token
-  // loginKey = require('crypto').randomBytes(64).toString('hex');
-
-  // if (user.token) {
-  //   throw new PokemonBadRequest('User already logged in')
-  // }
-
-
-  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { noTimestamp : true });
+  const token = jwt.sign({ role: user.role }, process.env.TOKEN_SECRET, { noTimestamp : true });
 
   //add token to db
   await userModel.updateOne({ _id: user
     ._id }, { $set: { token: token } });
     
-  res.header('auth-token', token)
+  // res.header('auth-token', token)
   res.send(user)
 }))
 
-const { auth } = require('./authCheck');
+
+const { auth, adminAuth } = require('./authCheck');
 
 app.use(auth);
+
+// app.get("*", function (req, res) {
+//   res.json({ msg: "404 - route not found" });
+// });
 
 app.get("/api/v1/pokemons", asyncWrapper (async (req, res) => {
   let count = req.query.count;
@@ -146,6 +143,8 @@ app.get("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
   // }
 })
 );
+
+
 
 app.get("/api/v1/pokemonImage/:id", asyncWrapper (async (req, res) => {
   const id = req.params.id;
@@ -218,9 +217,5 @@ app.patch("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
   //   res.json({ error });
   // }
 }));
-
-app.get("*", function (req, res) {
-  res.json({ msg: "404 - route not found" });
-});
 
 app.use(errorOverride);
