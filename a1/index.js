@@ -102,9 +102,32 @@ app.post('/logout', asyncWrapper(async (req, res) => {
 }))
 
 
-const { auth, adminAuth } = require('./authCheck');
+// const { auth, adminAuth } = require('./authCheck');
 
-app.use(auth);
+const auth = async (req, res, next) => {
+  const appid = req.query.appid;
+  console.log(appid);
+
+  let user = await userModel.findOne({token: appid});
+
+  console.log(user);
+
+  if (user == null) {
+    throw new PokemonBadRequest("No user matches this token");
+  }
+
+  try {
+    const verified = jwt.verify(appid, process.env.TOKEN_SECRET, { noTimestamp : true });
+    console.log(verified);
+    req.query.role = verified.role;
+    next();
+  } catch (err) {
+    throw new PokemonBadRequest("Invalid token");
+  }
+}
+
+
+app.use(asyncWrapper(auth));
 
 // app.get("*", function (req, res) {
 //   res.json({ msg: "404 - route not found" });
