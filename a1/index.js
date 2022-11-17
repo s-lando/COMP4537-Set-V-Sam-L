@@ -93,6 +93,7 @@ app.post('/logout', asyncWrapper(async (req, res) => {
   if (!user) {
     throw new PokemonNotFoundError('User not found')
   }
+
   //remove token from user
   await userModel.updateOne({ _id: user
     ._id }, { $set: { token: null } });
@@ -163,6 +164,12 @@ app.get("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
 
 
 app.get("/api/v1/pokemonImage/:id", asyncWrapper (async (req, res) => {
+
+  if (req.query.role != "admin") {
+    throw new PokemonBadRequest("Error, you must be an admin to access this route");
+  }
+
+
   const id = req.params.id;
   if (id < 1 || id > 809) {
     // res.json({ msg: "id must be between 1 and 809 inclusive" });
@@ -179,6 +186,11 @@ app.get("/api/v1/pokemonImage/:id", asyncWrapper (async (req, res) => {
 }));
 
 app.post("/api/v1/pokemon", asyncWrapper  (async (req, res) => {
+  if (req.query.role != "admin") {
+    throw new PokemonBadRequest("Error, you must be an admin to access this route");
+  }
+
+
   const body = req.body;
   if (body == undefined || body == null) {
     throw new PokemonBadRequest("Bad Request, body must be provided with id parameter");
@@ -192,6 +204,12 @@ app.post("/api/v1/pokemon", asyncWrapper  (async (req, res) => {
 }));
 
 app.put("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
+
+  if (req.query.role != "admin") {
+    throw new PokemonBadRequest("Error, you must be an admin to access this route");
+  }
+
+
   const id = req.params.id;
   const body = req.body;
   // try {
@@ -206,6 +224,12 @@ app.put("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
 }));
 
 app.delete("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
+
+  if (req.query.role != "admin") {
+    throw new PokemonBadRequest("Error, you must be an admin to access this route");
+  }
+
+
   const id = req.params.id;
 
   // try {
@@ -217,6 +241,11 @@ app.delete("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
 }));
 
 app.patch("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
+  if (req.query.role != "admin") {
+    throw new PokemonBadRequest("Error, you must be an admin to access this route");
+  }
+
+
   const id = req.params.id;
   const body = req.body;
 

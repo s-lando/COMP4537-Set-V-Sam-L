@@ -6,29 +6,27 @@ const auth = async (req, res, next) => {
   const appid = req.query.appid;
   console.log(appid);
 
-  await userModel.findOne({token: appid}, (err, user) => {
+  let user = await userModel.findOne({appid: appid});
 
-    userModel.findOne({token: appid}, (err, user) => {
-      if (!user) {
-        throw new PokemonBadRequest('Could not find user with that token');
-      }
-      next();
-    })
-  })
+  if (user == null) {
+    throw new PokemonBadRequest("No user matches this token");
+  }
 
   try {
     const verified = jwt.verify(appid, process.env.TOKEN_SECRET, { noTimestamp : true });
     console.log(verified);
+    req.query.role = verified.role;
     next();
   } catch (err) {
     throw new PokemonBadRequest("Invalid token");
   }
 }
 
+
 const adminAuth = (req, res, next) => {
   const appid = req.query.appid;
   try {
-    const verified = jwt.verify(appid, process.env.ADMIN_SECRET, { noTimestamp : true });
+    const verified = jwt.verify(appid, process.env.TOKEN_SECRET, { noTimestamp : true });
 
     if (verified.role == 'admin') {
       console.log('admin verified');
