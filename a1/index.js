@@ -14,6 +14,7 @@ const { errorOverride } = require("./errorOverride");
 const dotenv = require("dotenv");
 dotenv.config();
 
+
 const userModel = require("./userModel.js");
 const {connectDB, getTypes, addPokemons} = require("./setupDB.js");
 
@@ -40,76 +41,7 @@ const setupApp = asyncWrapper(async () => {
     }
     console.log("Server is running on port", process.env.PORT);
   });
-//       await mongoose.connect(
-//         "mongodb+srv://user01:test123@assignment.v6xmn9p.mongodb.net/db1?retryWrites=true&w=majority"
-//       );
-//      if (error) {
-//       throw new PokemonDbError(error.messsage);
-//     }
-//     console.log(`Example app listening on port ${port}`);
 
-//     https.get(
-//       "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/types.json",
-//       async (res) => {
-//         let data = "";
-//         res.on("data", (chunk) => {
-//           data += chunk;
-//         });
-//         res.on("end", () => {
-//           let jsonTypes = JSON.parse(data);
-//           console.log(jsonTypes);
-//           jsonTypes.forEach((type) => {
-//             possibleTypes.push(type.english);
-//           });
-//           console.log(possibleTypes);
-//         });
-//       }
-//     );
-
-
-
-//     pokemonSchema = new Schema({
-//       base: {
-//         HP: Number,
-//         Attack: Number,
-//         Defense: Number,
-//         "Sp. Attack": Number,
-//         "Sp. Defense": Number,
-//         Speed: Number,
-//       },
-//       id: { type: Number, unique: true },
-//       name: {
-//         english: { type: String, maxlength: 20 },
-//         japanese: String,
-//         chinese: String,
-//         french: String,
-//       },
-//       type: { type: [String], enum: possibleTypes },
-//     });
-
-//     pokemonModel = mongoose.model("pokemons", pokemonSchema);
-//     await pokemonModel.deleteMany({}).then(() => {
-//       console.log("deleted all");
-//     });
-
-//     await https.get(
-//       "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/pokedex.json",
-//       async (res) => {
-//         let data = "";
-//         res.on("data", (chunk) => {
-//           data += chunk;
-//         });
-//         res.on("end", () => {
-//           // console.log(JSON.parse(data));
-//           let pokemon = JSON.parse(data);
-//           pokemon.forEach(async (p) => {
-//             await pokemonModel.create(p);
-//           });
-//         });
-//       }
-//     );
-//   });
-// });
 });
 setupApp();
 
@@ -131,6 +63,8 @@ app.post('/register', asyncWrapper(async (req, res) => {
 const jwt = require('jsonwebtoken');
 app.post('/login', asyncWrapper(async (req, res) => {
   const { username, password } = req.body
+
+  // const appid = req.query.appid;
   const user = await userModel.findOne({ username })
   if (!user) {
     throw new PokemonNotFoundError('User not found')
@@ -140,7 +74,20 @@ app.post('/login', asyncWrapper(async (req, res) => {
     throw new PokemonBadRequest('Invalid password')
   }
 
-  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
+  //generate token
+  // loginKey = require('crypto').randomBytes(64).toString('hex');
+
+  // if (user.token) {
+  //   throw new PokemonBadRequest('User already logged in')
+  // }
+
+
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { noTimestamp : true });
+
+  //add token to db
+  await userModel.updateOne({ _id: user
+    ._id }, { $set: { token: token } });
+    
   res.header('auth-token', token)
   res.send(user)
 }))

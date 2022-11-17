@@ -1,12 +1,16 @@
 const { PokemonBadRequest } = require("./errorClasses");
+const jwt = require('jsonwebtoken');
 
 const auth = (req, res, next) => {
-  const token = req.header('auth-token');
-  if (!token) 
-    throw new PokemonBadRequest("You must be signed in to access this resource");
+  const appid = req.query.appid;
+  // const token = req.header('auth-token');
+  // if (!token) 
+
+
+  //   throw new PokemonBadRequest(appid + " is not a valid appid");
 
   try {
-    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+    const verified = jwt.verify(appid, process.env.TOKEN_SECRET, { noTimestamp : true });
     req.user = verified;
     next();
   } catch (err) {
