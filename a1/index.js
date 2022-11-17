@@ -84,6 +84,22 @@ app.post('/login', asyncWrapper(async (req, res) => {
   res.send(user)
 }))
 
+app.post('/logout', asyncWrapper(async (req, res) => {
+  const { username } = req.body
+
+  // const appid = req.query.appid;
+  const user = await userModel.findOne
+  ({ username })
+  if (!user) {
+    throw new PokemonNotFoundError('User not found')
+  }
+  //remove token from user
+  await userModel.updateOne({ _id: user
+    ._id }, { $set: { token: null } });
+  res.send(user)
+
+}))
+
 
 const { auth, adminAuth } = require('./authCheck');
 

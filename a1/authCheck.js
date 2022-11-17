@@ -1,14 +1,20 @@
 const { PokemonBadRequest } = require("./errorClasses");
 const jwt = require('jsonwebtoken');
+const userModel = require("./userModel.js");
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   const appid = req.query.appid;
   console.log(appid);
-  // const token = req.header('auth-token');
-  // if (!token) 
 
+  await userModel.findOne({token: appid}, (err, user) => {
 
-  //   throw new PokemonBadRequest(appid + " is not a valid appid");
+    userModel.findOne({token: appid}, (err, user) => {
+      if (!user) {
+        throw new PokemonBadRequest('Could not find user with that token');
+      }
+      next();
+    })
+  })
 
   try {
     const verified = jwt.verify(appid, process.env.TOKEN_SECRET, { noTimestamp : true });
