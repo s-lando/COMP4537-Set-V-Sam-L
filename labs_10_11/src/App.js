@@ -1,23 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
+import FilterPagination from './FilterPagination';
+import TypeSearch from './TypeSearch';
+
 
 function App() {
+
+  const [checkedState, setCheckedState] = useState([]);
+
+  const types = [
+    "normal",
+    "fire",
+    "water",
+    "electric",
+    "grass",
+    "ice",
+    "fighting",
+    "poison",
+    "ground",
+    "flying",
+    "psychic",
+    "bug",
+    "rock",
+    "ghost",
+    "dragon",
+    "dark",
+    "steel",
+    "fairy",
+  ]
+
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TypeSearch types={types} checkedState={checkedState} setCheckedState={setCheckedState} />
+      <FilterPagination types={types} checkedState={checkedState} />
     </div>
   );
 }
