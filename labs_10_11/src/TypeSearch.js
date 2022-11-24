@@ -26,7 +26,7 @@ function TypeSearch({types, checkedState, setCheckedState}) {
   };
 
   return (
-    <div>
+    <div id={"filter"}>
       {
         types.map((type) => {
 
