@@ -8,30 +8,27 @@ function FilterPagination({types, checkedState}) {
   const [pokemons, setPokemons] = useState([]);
 
   useEffect(() => {
+    //filter pokemons by checked types
 
-    let checked = checkedState.filter((item) => item.checked === true);
-    pokemon.filter(p => {
-      if (checked.length === 0) {
-        setPokemons(pokemon);
-      } else {
-        checked.map((item) => {
-          if (p.type.includes(item.name)) {
-            setPokemons((prev) => [...prev, p]);
-          }
-        });
-      }
+    const filteredPokemons = pokemon.filter((p) => {
+      return p.type.some((t) => {
+        return checkedState[types.indexOf(t)];
+      });
     });
+
+    setPokemons(filteredPokemons);
+
+
   }, [checkedState]);
 
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [pokemonPerPage] = useState(10);
+  const [pokemonPerPage] = useState(3);
 
   const indexOfLastPokemon = currentPage * pokemonPerPage;
   const indexOfFirstPokemon = indexOfLastPokemon - pokemonPerPage;
-  const currentPokemon = pokemon.slice(indexOfFirstPokemon, indexOfLastPokemon);
+  const currentPokemon = pokemons.slice(indexOfFirstPokemon, indexOfLastPokemon);
 
-  const numberOfPages = Math.ceil(pokemon.length / pokemonPerPage);
+  const numberOfPages = Math.ceil(pokemons.length / pokemonPerPage);
 
   return (
     <div>
@@ -40,3 +37,5 @@ function FilterPagination({types, checkedState}) {
     </div>
   )
 }
+
+export default FilterPagination;

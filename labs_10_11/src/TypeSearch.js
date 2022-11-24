@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 function TypeSearch({types, checkedState, setCheckedState}) {
 
@@ -7,6 +7,9 @@ function TypeSearch({types, checkedState, setCheckedState}) {
     const index = types.indexOf(type);
 
     const newCheckedState = checkedState.map((item, i) => {
+
+      console.log(item);
+      console.log(i);
         
         if (i === index) {
 
@@ -25,20 +28,19 @@ function TypeSearch({types, checkedState, setCheckedState}) {
   return (
     <div>
       {
-        types.map((type, index) => (
-          <div key={index}>
-            <input
-              type="checkbox"
-              checked={checkedState[index]}
-              onChange={() => onChange(type)}
-            />
-            <label>{type}</label>
-          </div>
-        ))
+        types.map((type) => {
+
+          return (
+            <div key={type}>
+              <input type="checkbox" value={type} id={type} onChange={() => { onChange(type)}} />
+              <label>{type}</label>
+            </div>
+          );
+        })
       }
     </div>
   );
 
-    
-
 }
+
+export default TypeSearch;
