@@ -6,11 +6,7 @@ import TypeSearch from './TypeSearch';
 
 
 function App() {
-
-
   
-  const [checkedState, setCheckedState] = useState([]);
-
   const types = [
     "Normal",
     "Fighting",
@@ -32,9 +28,11 @@ function App() {
     "Fairy",
   ];
 
-  useEffect(() => {
-    setCheckedState(types.map(() => false));
-  }, []);
+  const [checkedState, setCheckedState] = useState(types.map(() => false));
+  
+  // useEffect(() => {
+  //   setCheckedState(types.map(() => false));
+  // }, []);
 
   
   return (

@@ -19,7 +19,7 @@ function FilterPagination({types, checkedState}) {
     setPokemons(filteredPokemons);
 
 
-  }, [checkedState]);
+  }, [checkedState, types]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pokemonPerPage] = useState(3);
