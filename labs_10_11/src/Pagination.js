@@ -20,10 +20,10 @@ function Pagination({ n, current, setCurrent }) {
       {(current !== 1) && (<button onClick={prevPage}>prev </button>)}
 
       {
-        pageNumbers.map(number => {
+        pageNumbers.forEach(number => {
           if (number < current && number > current)
             return (<>
-              <button onClick={() => setCurrent(number)} className={(number == current) ? 'active' : ''}>
+              <button onClick={() => setCurrent(number)} className={(number === current) ? 'active' : ''}>
                 {number}
               </button>
             </>)
