@@ -6,6 +6,8 @@ const {
   PokemonNotFoundError,
 } = require("./errorClasses");
 
+const cors = require("cors");
+
 const { asyncWrapper } = require("./asyncWrapper");
 const { errorOverride } = require("./errorOverride");
 
@@ -18,9 +20,14 @@ const {connectDB, getTypes, addPokemons} = require("./setupDB.js");
 
 const app = express();
 
+
+
 // const https = require("https");
 
 app.use(express.json());
+
+app.use(cors());
+
 
 // let possibleTypes = [];
 // let pokemonSchema = null;
@@ -60,6 +67,7 @@ app.post('/register', asyncWrapper(async (req, res) => {
 const jwt = require('jsonwebtoken');
 app.post('/login', asyncWrapper(async (req, res) => {
   const { username, password } = req.body
+  
 
   // const appid = req.query.appid;
   const user = await userModel.findOne({ username })
