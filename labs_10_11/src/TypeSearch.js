@@ -26,18 +26,21 @@ function TypeSearch({types, checkedState, setCheckedState}) {
   };
 
   return (
+    <div>
+      <h1> Pokemon Type Filter</h1>
     <div id={"filter"}>
       {
         types.map((type) => {
 
           return (
-            <div key={type}>
+            <div key={type} className="checkbox">
               <input type="checkbox" value={type} id={type} onChange={() => { onChange(type)}} />
               <label>{type}</label>
             </div>
           );
         })
       }
+    </div>
     </div>
   );
 

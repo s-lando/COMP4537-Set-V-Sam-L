@@ -22,7 +22,7 @@ function FilterPagination({types, checkedState}) {
   }, [checkedState, types]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pokemonPerPage] = useState(3);
+  const [pokemonPerPage] = useState(4);
 
   const indexOfLastPokemon = currentPage * pokemonPerPage;
   const indexOfFirstPokemon = indexOfLastPokemon - pokemonPerPage;

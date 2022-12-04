@@ -12,11 +12,38 @@
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
   margin: 0 auto;
-  width: 100%;
+  width: 90%;
+  padding-top: 1em;
 
 }
+
+.checkbox {
+  margin: 5px;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  
+}
+
+button {
+  background-color: #e8e1e150; 
+  border: black 1px solid;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
