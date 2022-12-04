@@ -85,6 +85,11 @@ app.get("/api/v1/pokemons", asyncWrapper (async (req, res) => {
 
     pokemons = pokemons.slice(0, count);
 
+    //log the request in analytics db
+    await reportModel.updateOne({ name: "getPokemons", usertype: req.user.type}, { $inc: { count: 1 } });
+
+  
+
     res.json(pokemons);
   // } catch (error) {
   //   console.log(error);
@@ -127,6 +132,9 @@ app.get("/api/v1/pokemonImage/:id", asyncWrapper (async (req, res) => {
     // return;
     throw new PokemonBadRequest("Bad Request, id must be between 1 and 809 inclusive");
   }
+
+      //log the request in analytics db
+    await reportModel.updateOne({ name: "pokemonImage", usertype: req.user.type}, { $inc: { count: 1 } });
 
   const url =
     "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/images/" +
@@ -185,6 +193,9 @@ app.delete("/api/v1/pokemon/:id", asyncWrapper (async (req, res) => {
 
   // try {
     let result = await pokemonModel.deleteOne({ id: id });
+
+    //log the request in analytics db
+    await reportModel.updateOne({ name: "deletePokemons", usertype: req.user.type}, { $inc: { count: 1 } });
     res.json({ result });
   // } catch (error) {
   //   res.json({ error });
