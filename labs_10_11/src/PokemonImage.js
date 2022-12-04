@@ -15,7 +15,7 @@ function PokemonImage({ pokemon }) {
 
   return (
     
-    <img src={`https://github.com/fanzeyi/pokemon.json/raw/master/images/${addLeadingZeros(pokemon.id)}.png`} />
+    <img src={`https://github.com/fanzeyi/pokemon.json/raw/master/images/${addLeadingZeros(pokemon.id)}.png`} width={200} />
   )
 }
 
